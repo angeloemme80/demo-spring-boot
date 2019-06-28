@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author admwks
  */
 @SpringBootApplication
-@ComponentScan(basePackages = { "it.angelomassaro.controller","it.angelomassaro.restcontroller"} )
+@ComponentScan(basePackages = { "it.angelomassaro.controller", "it.angelomassaro.restcontroller", "it.angelomassaro.demospringboot"} )
 public class Application {
   
     public static void main(String[] args) {
