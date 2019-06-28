@@ -56,4 +56,29 @@ public class HelloRestController {
         data.put("data", dataMap);
         return data;
     }
+    
+    @RequestMapping("/primo")
+    @ResponseBody
+    public Map<String, Object> primo(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        
+        dataMap.put("primo","PRIMO REST");
+        
+        data.put("data", dataMap);
+        return data;
+    }
+    
+    @RequestMapping("/secondo")
+    @ResponseBody
+    public Map<String, Object> secondo(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        
+        dataMap.put("secondo","SECONDO REST");
+        
+        data.put("data", dataMap);
+        return data;
+    }
+    
 }
