@@ -5,11 +5,13 @@
  */
 package it.angelomassaro.restcontroller;
 
+import it.angelomassaro.cdi.SessionData;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class HelloRestController {
+   
+    
+    @Autowired
+    SessionData sessionData;
     
     @RequestMapping("/")
     @ResponseBody
@@ -32,6 +38,8 @@ public class HelloRestController {
         headers.forEach((key, value) -> {
             System.out.println(String.format("Header '%s' = %s", key, value.stream().collect(Collectors.joining("|"))));
         });
+        
+        sessionData.setContatore(sessionData.getContatore()+1);
         
         Map<String, Object> data = new HashMap<String, Object>();
         Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -53,6 +61,7 @@ public class HelloRestController {
         
         dataMap.put("req", reqValue);
         dataMap.put("pc",pcValue);
+        dataMap.put("sessionData.getContatore()", sessionData.getContatore());
         data.put("data", dataMap);
         return data;
     }

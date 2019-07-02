@@ -5,22 +5,31 @@
  */
 package it.angelomassaro.demospringboot;
 
+import it.angelomassaro.cdi.SessionData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.context.annotation.SessionScope;
 
 /**
  *
  * @author admwks
  */
 @SpringBootApplication
-@ComponentScan(basePackages = { "it.angelomassaro.controller", "it.angelomassaro.restcontroller", "it.angelomassaro.demospringboot"} )
+@ComponentScan(basePackages = { "it.angelomassaro.controller", "it.angelomassaro.restcontroller", "it.angelomassaro.demospringboot","it.angelomassaro.cdi"} )
 public class Application {
   
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
     
+   @Bean
+   @SessionScope
+   public SessionData sessionData() {
+      return new SessionData();
+   }
+   
     /*
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
