@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("demo")
 public class DemoController {
     
-    	@RequestMapping(value="/menu", method = RequestMethod.GET)
+    @RequestMapping(value="/menu", method = RequestMethod.GET)
 	public ModelAndView menu() {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("home");
