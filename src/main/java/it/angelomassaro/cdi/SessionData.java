@@ -5,8 +5,6 @@
  */
 package it.angelomassaro.cdi;
 
-import org.springframework.web.context.annotation.SessionScope;
-
 /**
  *
  * @author admwks
