@@ -10,12 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author admwks
  */
 
-@CrossOrigin(origins = {"*"})
+//@CrossOrigin(origins = {"*"}, value = {"*"}, allowCredentials = "")
+//@CrossOrigin(origins = {"http://localhost:3000/"})
 @RestController
 public class HelloRestController {
    
@@ -32,15 +39,45 @@ public class HelloRestController {
     @Autowired
     SessionData sessionData;
     
-    @RequestMapping("/")
+    @RequestMapping(value="/", method = RequestMethod.OPTIONS)
+    ResponseEntity<?> collectionOptions(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	
+     
+        MultiValueMap<String, String> headers= new LinkedMultiValueMap<String,String>();
+      //response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+    	headers.add("Access-Control-Allow-Credentials", "true");
+    	headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+    	headers.add("Access-Control-Max-Age", "3600");
+    	headers.add("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+        
+         return ResponseEntity
+                 .ok()
+                 .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
+                 .headers(new HttpHeaders(headers))
+                 .build();
+    }
+    
+    @RequestMapping(value="/", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> index(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers) {
+    public Map<String, Object> index(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers, HttpServletResponse response) {
         
         HttpSession session = request.getSession(true);//true will create if necessary
         
         headers.forEach((key, value) -> {
             System.out.println(String.format("Header '%s' = %s", key, value.stream().collect(Collectors.joining("|"))));
         });
+        
+        
+        //response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+
+        
         
         sessionData.setContatore(sessionData.getContatore()+1);
         
@@ -64,7 +101,7 @@ public class HelloRestController {
         
         dataMap.put("req", reqValue);
         dataMap.put("pc",pcValue);
-        dataMap.put("sessionData.getContatore()", sessionData.getContatore());
+        dataMap.put("contatore", sessionData.getContatore());
         data.put("data", dataMap);
         return data;
     }
