@@ -1,8 +1,12 @@
 package it.angelomassaro.restcontroller;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -30,7 +34,9 @@ public class FileUploadRest {
 
 	
 	@PostMapping("/upload")
-	public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("fileBis") MultipartFile fileBis) {
+	public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("fileBis") MultipartFile fileBis, @RequestHeader Map<String, String> requestHeaders) {
+		
+		System.out.println("requestHeaders X-ReplyTo: " + requestHeaders.get("xreplyto"));
 		if (null == file.getOriginalFilename()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -48,7 +54,11 @@ public class FileUploadRest {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		return new ResponseEntity<>("Good Job", HttpStatus.OK);
+		
+		MultiValueMap<String, String> headers = new LinkedMultiValueMap<String,String>();
+		//headers.add("X-ReplyTo", "https://www.giustizia-amministrativa.it/replyqui");
+		headers.add("X-Correlation-ID", "idAcaso");
+		return new ResponseEntity<>("Good Job", new HttpHeaders(headers), HttpStatus.OK );
 	}
 	
 	
