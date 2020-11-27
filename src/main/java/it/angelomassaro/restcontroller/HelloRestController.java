@@ -130,4 +130,28 @@ public class HelloRestController {
         return data;
     }
     
+    @RequestMapping("/1")
+    @ResponseBody
+    public Map<String, Object> uno(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        
+        dataMap.put("uno","REST numero 1 (uno)");
+        
+        data.put("data", dataMap);
+        return data;
+    }
+    
+    @RequestMapping("/2")
+    @ResponseBody
+    public Map<String, Object> due(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        
+        dataMap.put("due","REST numero 2 (uno)");
+        
+        data.put("data", dataMap);
+        return data;
+    }
+    
 }
