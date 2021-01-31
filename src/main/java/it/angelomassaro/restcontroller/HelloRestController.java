@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -106,6 +107,9 @@ public class HelloRestController {
         return data;
     }
     
+    @Value("${mia.proprieta}")
+    private String miaProprieta;
+    
     @RequestMapping("/primo")
     @ResponseBody
     public Map<String, Object> primo(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers) {
@@ -113,6 +117,7 @@ public class HelloRestController {
         Map<String, Object> dataMap = new HashMap<String, Object>();
         
         dataMap.put("primo","PRIMO REST");
+        dataMap.put("miaProprieta",miaProprieta);
         
         data.put("data", dataMap);
         return data;
