@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloRestController {
    
+	private static final Logger logger = LoggerFactory.getLogger(HelloRestController.class);
     
     @Autowired
     SessionData sessionData;
@@ -63,11 +68,13 @@ public class HelloRestController {
     @RequestMapping(value="/", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> index(HttpServletRequest request, @RequestHeader MultiValueMap<String, String> headers, HttpServletResponse response) {
-        
+    	
         HttpSession session = request.getSession(true);//true will create if necessary
+        MDC.put("variabileLogback", session.getId());//come esempio, passo una variabile al file di configurazione di logback
         
         headers.forEach((key, value) -> {
-            System.out.println(String.format("Header '%s' = %s", key, value.stream().collect(Collectors.joining("|"))));
+            //System.out.println(String.format("Header '%s' = %s", key, value.stream().collect(Collectors.joining("|"))));
+            logger.info(String.format("Header '%s' = %s", key, value.stream().collect(Collectors.joining("|"))));
         });
         
         
